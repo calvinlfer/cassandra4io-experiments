@@ -1,0 +1,23 @@
+version: '2.1'
+
+services:
+  datastax-enterprise:
+    image: docker-registry.prod.williamhill.plc/betting-engine/quick-dse:be-1.2.0
+    command: -s
+    hostname: datastax-enterprise
+    container_name: datastax-enterprise
+    mem_limit: 1300m
+    ports:
+      - "9042:9042"
+    volumes:
+      - ./schemas/wh-bonus/data:/schema-migrations
+    # NOTE: Execute ./scripts/run-dse-migrations.sh after
+
+  datastax-studio:
+    image: datastax/dse-studio
+    ports:
+      - "9091:9091"
+    environment:
+      DS_LICENSE: accept
+    depends_on:
+      - datastax-enterprise
