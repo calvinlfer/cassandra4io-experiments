@@ -4,9 +4,11 @@ import cats.effect.{ExitCode, IO, IOApp}
 import com.datastax.oss.driver.api.core.{ConsistencyLevel, CqlSession}
 import com.ringcentral.cassandra4io.CassandraSession
 import com.ringcentral.cassandra4io.cql._
+
 import scala.jdk.CollectionConverters._
 import java.net.InetSocketAddress
 import BinderExtras._
+import fs2.Stream
 
 /**
  * CREATE TYPE datapoint (

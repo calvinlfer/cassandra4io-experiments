@@ -17,7 +17,8 @@ import BinderExtras._
  */
 final case class NestedType(nested: Set[Set[BasicInfo]])
 object NestedType {
-  implicit val nestedTypeBinder: Binder[NestedType] = binderUdt[NestedType]
+  implicit val nestedTypeBinder: Binder[NestedType] = UdtValueBinder.deriveTopLevel[NestedType]
+  implicit val nestedTypeReads: Reads[NestedType]   = UdtValueReads.deriveTopLevel[NestedType]
 }
 final case class NestedExample(a: Int, b: NestedType)
 
@@ -45,7 +46,13 @@ object NestedUDTApp extends IOApp {
       )
       .use { session =>
         cql"INSERT INTO nested_example (a, b) VALUES (${data.a}, ${data.b})"
-          .execute(session)
-          .as(ExitCode.Success)
+          .execute(session) *>
+          cql"SELECT a, b FROM nested_example WHERE a = ${data.a}"
+            .as[NestedExample]
+            .select(session)
+            .evalTap(row => IO(println(row)))
+            .compile
+            .drain
+            .as(ExitCode.Success)
       }
 }
