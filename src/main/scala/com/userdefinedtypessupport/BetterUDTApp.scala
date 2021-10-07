@@ -20,7 +20,7 @@ final case class Datapoint(x: Int, y: Int, z: Map[Int, String])
 /**
  * CREATE TYPE basic_info (
  *    weight text,
- *    height double
+ *    height double,
  *    datapoints frozen<list<datapoint>>
  * );
  */
@@ -55,32 +55,6 @@ object BetterUDTApp extends IOApp {
       .connect[IO](builder)
       .map(new ExampleRepo(_))
       .use(repo =>
-//        repo.put2(
-//          NestedExample(
-//            1,
-//            NestedType(
-//              Set(
-//                Set(
-//                  BasicInfo(
-//                    weight = "tall",
-//                    height = Option(100.0),
-//                    datapoints = List(
-//                      Datapoint(1, 2, Map(3 -> "three")),
-//                      Datapoint(4, 5, Map(6 -> "six", 7 -> "seven"))
-//                    )
-//                  ),
-//                  BasicInfo(
-//                    weight = "med",
-//                    height = Option(80.0),
-//                    datapoints = List(
-//                      Datapoint(6, 7, Map.empty)
-//                    )
-//                  )
-//                )
-//              )
-//            )
-//          )
-//        )
         repo.put(
           YetAnotherExampleRow(
             99,
